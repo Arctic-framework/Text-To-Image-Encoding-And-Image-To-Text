@@ -1,0 +1,123 @@
+# CREATED BY BRYTAN M KELLY MAY 9 2023, ALL RIGHTS AND REGULATIONS ARE NOTED UNDER THE MIT LICENSE THAT THIS CODE IS AFFILIEATED WITH.
+
+import tkinter as tk
+from tkinter import filedialog
+from PIL import Image
+
+def text_to_image():
+    input_file = filedialog.askopenfilename(title="Select Input Text File must be .txt")
+    design_image_file = filedialog.askopenfilename(title="Select Design Image File must be less that 255x255 and must be jpg")
+    output_file = filedialog.asksaveasfilename(title="Save Output Image", defaultextension=".png")
+
+    with open(input_file, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+
+    # Calculate the image size based on the longest line length
+    width = max(len(line) for line in lines)
+    height = len(lines)
+
+    # Load the design image and resize it to match the output image size
+    design_image = Image.open(design_image_file).resize((width, height))
+
+    # Create an RGB image with combined design and brightness information
+    image = Image.new('RGB', (width, height))
+    pixels = image.load()
+
+    # Convert text to ASCII values and assign colors based on the design image while preserving brightness
+    for y in range(height):
+        line = lines[y]
+        for x in range(len(line)):
+            char = line[x]
+            if char == 'ÿ':  # Replace "ÿ" characters with spaces
+                char = ' '
+            ascii_value = ord(char.encode('utf-8'))
+            brightness = ascii_value  # Preserve brightness information
+
+            # Get random RGB values from the design image while avoiding pure black (0, 0, 0)
+            while True:
+                design_r, design_g, design_b = design_image.getpixel((x, y))
+                if design_r + design_g + design_b > 0:
+                    break
+
+            r, g, b = brightness, design_g, design_b  # Preserve brightness, use design image's G and B values
+            pixels[x, y] = (r, g, b)
+
+    # Save the image
+    image.save(output_file)
+    tk.messagebox.showinfo("Image Conversion", "Text to image conversion is complete!")
+
+def image_to_text():
+    input_file = filedialog.askopenfilename(title="Select Input Image File")
+    output_file = filedialog.asksaveasfilename(title="Save Output Text", defaultextension=".txt")
+
+    image = Image.open(input_file)
+    pixels = image.load()
+
+    text = ""
+    width, height = image.size
+
+    # Retrieve characters from RGB channels
+    for y in range(height):
+        line = ""
+        for x in range(width):
+            r, g, b = pixels[x, y]
+            brightness = r  # Assuming all channels have the same brightness value
+            if brightness == 32:  # Convert ASCII 32 back to space
+                line += ' '
+            elif brightness == 0:  # Handle null values
+                line += 'ÿ'
+            else:
+                char = chr(brightness)
+                line += char
+        text += line.rstrip() + '\n'  # Remove trailing spaces and add newline
+
+    # Remove remaining "ÿ" characters and replace them with spaces
+    text = text.replace('ÿ', ' ')
+
+    # Save the text to a file
+    with open(output_file, 'w', encoding='utf-8') as file:
+        file.write(text)
+    tk.messagebox.showinfo("Image Conversion", "Image to text conversion is complete!")
+
+# Create the Tkinter window
+window = tk.Tk()
+window.title("CYNDER ENCRYPTION SYSTEM")
+
+# Set the background color to green
+window.configure(bg="green")
+
+# Allow window resizing
+window.resizable(True, True)
+
+# Create a title label
+title_label = tk.Label(window, text="Text-to-Image Conversion", font=("Arial", 16, "bold"), bg="green")
+title_label.pack(pady=10)
+
+# Create labels
+text_label = tk.Label(window, text="Step 1: Select Input Text File")
+text_label.pack()
+
+design_label = tk.Label(window, text="Step 2: Select Design Image File (must be a small jpeg like 255x255 max)")
+design_label.pack()
+
+# Create the buttons
+text_to_image_button = tk.Button(window, text="Text to Image", command=text_to_image, fg="red")
+text_to_image_button.pack()
+
+
+image_to_text_button = tk.Button(window, text="Image to Text", command=image_to_text ,fg="red")
+image_to_text_button.pack()
+
+
+design_label = tk.Label(window, text="Step 1: Select the image that you want to decode")
+design_label.pack()
+
+design_label = tk.Label(window, text="Step 2: Type in the name of the text file that is the output of the image to text.")
+design_label.pack()
+
+# Add the logo at the bottom
+logo_label_bottom = tk.Label(window, text="Text-to-Image Conversion by Brytan M kelly", font=("Arial", 16, "bold"), bg="green")
+logo_label_bottom.pack(side="bottom", pady=10)
+
+# Run the Tkinter event loop
+window.mainloop()
