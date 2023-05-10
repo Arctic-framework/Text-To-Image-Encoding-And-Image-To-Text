@@ -1,0 +1,38 @@
+Code Documentation
+This code provides a graphical user interface (GUI) for converting text to images and images to text using the Tkinter library in Python. The code utilizes the tkinter module for creating the GUI elements and the PIL (Python Imaging Library) module for image manipulation.
+
+Functionality
+text_to_image(): This function converts text from an input file to an image. It prompts the user to select an input text file and a design image file. The function calculates the size of the output image based on the longest line in the text file. It then loads the design image, resizes it to match the output image size, and creates a new RGB image. The function assigns colors to each pixel based on the ASCII values of the characters in the text file and the corresponding design image pixel values. Finally, it saves the generated image and displays a message box indicating the completion of the conversion.
+
+image_to_text(): This function converts an image to text. It prompts the user to select an input image file and specifies the name and format for the output text file. The function loads the image, retrieves the RGB values of each pixel, and converts them back to ASCII characters. It reconstructs the text line by line and saves the resulting text to a file. Any remaining "ÿ" characters are replaced with spaces. A message box is displayed to indicate the completion of the conversion.
+
+Graphical User Interface (GUI)
+The GUI is created using Tkinter. It consists of a main window with a green background color and the title "CYNDER ENCRYPTION SYSTEM". The window allows resizing.
+
+The GUI includes the following elements:
+
+Title label: Displays the text "Text-to-Image Conversion" with a bold Arial font.
+Labels: Provide instructions for the conversion process.
+Buttons: Two buttons are present, "Text to Image" and "Image to Text". They trigger the respective conversion functions when clicked.
+Logo label at the bottom: Displays the text "Text-to-Image Conversion by Brytan M Kelly" with a bold Arial font.
+How to Use
+Run the code.
+
+The main window will appear with the title "CYNDER ENCRYPTION SYSTEM" and a green background.
+
+To convert text to an image:
+
+Click the "Text to Image" button.
+Select an input text file by clicking the "Select Input Text File" button in the file dialog.
+Select a design image file by clicking the "Select Design Image File" button in the file dialog. Note that the design image should be a small JPEG image with dimensions not exceeding 255x255 pixels.
+Choose the output file location and name by clicking the "Save Output Image" button in the file dialog. The image will be saved in PNG format.
+After the conversion is complete, a message box will appear with the text "Text to image conversion is complete!"
+To convert an image to text:
+
+Click the "Image to Text" button.
+Select an input image file by clicking the "Select Input Image File" button in the file dialog.
+Choose the output file location and name by clicking the "Save Output Text" button in the file dialog. The text will be saved in a text file with the ".txt" extension.
+After the conversion is complete, a message box will appear with the text "Image to text conversion is complete!"
+Close the main window to exit the program.
+
+Please note that the code assumes the required libraries (tkinter, PIL) are installed. If not, make sure to install them before running the code.
